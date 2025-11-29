@@ -1,0 +1,30 @@
+@model School.Core.Models.Course
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h2>Course Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Subject</dt>
+            <dd class="col-sm-9">@Model.Subject?.Name</dd>
+
+            <dt class="col-sm-3">Teacher</dt>
+            <dd class="col-sm-9">@Model.Teacher?.FirstName @Model.Teacher?.LastName</dd>
+
+            <dt class="col-sm-3">Classroom</dt>
+            <dd class="col-sm-9">@Model.Classroom?.Name</dd>
+
+            <dt class="col-sm-3">Schedule</dt>
+            <dd class="col-sm-9">@Model.Schedule</dd>
+        </dl>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.CourseId" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

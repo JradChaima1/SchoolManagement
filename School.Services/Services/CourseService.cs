@@ -1,51 +1,77 @@
 namespace School.Services.Services;
 
+using Microsoft.EntityFrameworkCore;
 using School.Core.Interfaces;
 using School.Core.Models;
+using School.Data;
 
 public class CourseService : ICourseService
 {
-    private readonly IRepository<Course> _courseRepository;
+    private readonly SchoolContext _context;
 
-    public CourseService(IRepository<Course> courseRepository)
+    public CourseService(SchoolContext context)
     {
-        _courseRepository = courseRepository;
+        _context = context;
     }
 
     public async Task<IEnumerable<Course>> GetAllCoursesAsync()
     {
-        return await _courseRepository.GetAllAsync();
+        return await _context.Courses
+            .Include(c => c.Subject)
+            .Include(c => c.Teacher)
+            .Include(c => c.Classroom)
+            .ToListAsync();
     }
 
     public async Task<Course?> GetCourseByIdAsync(int id)
     {
-        return await _courseRepository.GetByIdAsync(id);
+        return await _context.Courses
+            .Include(c => c.Subject)
+            .Include(c => c.Teacher)
+            .Include(c => c.Classroom)
+            .FirstOrDefaultAsync(c => c.CourseId == id);
     }
 
     public async Task<Course> CreateCourseAsync(Course course)
     {
-        return await _courseRepository.AddAsync(course);
+        _context.Courses.Add(course);
+        await _context.SaveChangesAsync();
+        return course;
     }
 
     public async Task UpdateCourseAsync(Course course)
     {
-        await _courseRepository.UpdateAsync(course);
+        _context.Courses.Update(course);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteCourseAsync(int id)
     {
-        await _courseRepository.DeleteAsync(id);
+        var course = await _context.Courses.FindAsync(id);
+        if (course != null)
+        {
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task<IEnumerable<Course>> GetCoursesByClassroomAsync(int classroomId)
     {
-        var courses = await _courseRepository.GetAllAsync();
-        return courses.Where(c => c.ClassroomId == classroomId).ToList();
+        return await _context.Courses
+            .Include(c => c.Subject)
+            .Include(c => c.Teacher)
+            .Include(c => c.Classroom)
+            .Where(c => c.ClassroomId == classroomId)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Course>> GetCoursesByTeacherAsync(int teacherId)
     {
-        var courses = await _courseRepository.GetAllAsync();
-        return courses.Where(c => c.TeacherId == teacherId).ToList();
+        return await _context.Courses
+            .Include(c => c.Subject)
+            .Include(c => c.Teacher)
+            .Include(c => c.Classroom)
+            .Where(c => c.TeacherId == teacherId)
+            .ToListAsync();
     }
 }

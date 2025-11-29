@@ -46,6 +46,18 @@
                             <input asp-for="DateOfBirth" type="date" class="form-control" />
                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                         </div>
+                        <div class="col-md-6">
+    <label asp-for="ParentId" class="form-label">Parent/Guardian</label>
+    <select asp-for="ParentId" class="form-control">
+        <option value="">-- Select Parent (Optional) --</option>
+        @foreach (var parent in ViewBag.Parents)
+        {
+            <option value="@parent.ParentId">@parent.FirstName @parent.LastName (@parent.Relationship)</option>
+        }
+    </select>
+    <span asp-validation-for="ParentId" class="text-danger"></span>
+</div>
+
                     </div>
                     
                     <div class="mt-4">

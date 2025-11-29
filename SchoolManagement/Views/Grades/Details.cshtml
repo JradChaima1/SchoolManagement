@@ -1,0 +1,54 @@
+@model School.Core.Models.Grade
+
+@{
+    ViewData["Title"] = "Grade Details";
+}
+
+<h2>Grade Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Student</dt>
+            <dd class="col-sm-9">@Model.Student?.FirstName @Model.Student?.LastName</dd>
+
+            <dt class="col-sm-3">Subject</dt>
+            <dd class="col-sm-9">@Model.Subject?.Name</dd>
+
+            <dt class="col-sm-3">Score</dt>
+            <dd class="col-sm-9">@Model.Score</dd>
+
+            <dt class="col-sm-3">Letter Grade</dt>
+            <dd class="col-sm-9">
+                @if (Model.Score >= 18)
+                {
+                    <span class="badge bg-success">A (Excellent)</span>
+                }
+                else if (Model.Score >= 16)
+                {
+                    <span class="badge bg-info">B (Good)</span>
+                }
+                else if (Model.Score >= 14)
+                {
+                    <span class="badge bg-primary">C (Average)</span>
+                }
+                else if (Model.Score >= 12)
+                {
+                    <span class="badge bg-warning">D (Below Average)</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">F (Failing)</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Date Recorded</dt>
+            <dd class="col-sm-9">@Model.DateRecorded.ToString("MMMM dd, yyyy")</dd>
+        </dl>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.GradeId" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

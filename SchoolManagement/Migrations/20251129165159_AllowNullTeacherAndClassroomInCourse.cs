@@ -1,0 +1,120 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace SchoolManagement.Migrations
+{
+    /// <inheritdoc />
+    public partial class AllowNullTeacherAndClassroomInCourse : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Courses_Classrooms_ClassroomId",
+                table: "Courses");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Courses_Teachers_TeacherId",
+                table: "Courses");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "TeacherId",
+                table: "Courses",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "SubjectId",
+                table: "Courses",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ClassroomId",
+                table: "Courses",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Courses_Classrooms_ClassroomId",
+                table: "Courses",
+                column: "ClassroomId",
+                principalTable: "Classrooms",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Courses_Teachers_TeacherId",
+                table: "Courses",
+                column: "TeacherId",
+                principalTable: "Teachers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Courses_Classrooms_ClassroomId",
+                table: "Courses");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Courses_Teachers_TeacherId",
+                table: "Courses");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "TeacherId",
+                table: "Courses",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "SubjectId",
+                table: "Courses",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ClassroomId",
+                table: "Courses",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Courses_Classrooms_ClassroomId",
+                table: "Courses",
+                column: "ClassroomId",
+                principalTable: "Classrooms",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Courses_Teachers_TeacherId",
+                table: "Courses",
+                column: "TeacherId",
+                principalTable: "Teachers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+        }
+    }
+}

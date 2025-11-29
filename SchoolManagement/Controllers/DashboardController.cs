@@ -7,33 +7,45 @@ namespace SchoolManagement.Controllers
     [AuthorizeSession]
     public class DashboardController : Controller
     {
-        private readonly IStudentService _studentService;
-        private readonly ITeacherService _teacherService;
-        private readonly IClassroomService _classroomService;
+        private readonly IAnalyticsService _analyticsService;
 
-        public DashboardController(
-            IStudentService studentService,
-            ITeacherService teacherService,
-            IClassroomService classroomService)
+        public DashboardController(IAnalyticsService analyticsService)
         {
-            _studentService = studentService;
-            _teacherService = teacherService;
-            _classroomService = classroomService;
+            _analyticsService = analyticsService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var students = await _studentService.GetAllStudentsAsync();
-            var teachers = await _teacherService.GetAllTeachersAsync();
-            var classrooms = await _classroomService.GetAllClassroomsAsync();
-            var topStudents = await _studentService.GetTopPerformingStudentsAsync(5);
+            var statistics = await _analyticsService.GetDashboardStatisticsAsync();
+            return View(statistics);
+        }
 
-            ViewBag.TotalStudents = students.Count();
-            ViewBag.TotalTeachers = teachers.Count();
-            ViewBag.TotalClassrooms = classrooms.Count();
-            ViewBag.TopStudents = topStudents;
+        [HttpGet]
+        public async Task<IActionResult> GetSubjectPerformance()
+        {
+            var data = await _analyticsService.GetSubjectPerformanceAsync();
+            return Json(data);
+        }
 
-            return View();
+        [HttpGet]
+        public async Task<IActionResult> GetClassroomStatistics()
+        {
+            var data = await _analyticsService.GetClassroomStatisticsAsync();
+            return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMonthlyEnrollments()
+        {
+            var data = await _analyticsService.GetMonthlyEnrollmentsAsync();
+            return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTeacherWorkload()
+        {
+            var data = await _analyticsService.GetTeacherWorkloadAsync();
+            return Json(data);
         }
     }
 }

@@ -9,10 +9,12 @@ namespace SchoolManagement.Controllers
     public class StudentsController : Controller
     {
         private readonly IStudentService _studentService;
+        private readonly IParentService _parentService;
 
-        public StudentsController(IStudentService studentService)
+        public StudentsController(IStudentService studentService, IParentService parentService)
         {
             _studentService = studentService;
+            _parentService = parentService;
         }
 
         public async Task<IActionResult> Index(string searchTerm)
@@ -47,10 +49,12 @@ namespace SchoolManagement.Controllers
             return View(student);
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+    public async Task<IActionResult> Create()
+   {
+    ViewBag.Parents = await _parentService.GetAllParentsAsync();
+    return View();
+   }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,17 +69,19 @@ namespace SchoolManagement.Controllers
             return View(student);
         }
 
-        public async Task<IActionResult> Edit(int id)
-        {
-            var student = await _studentService.GetStudentByIdAsync(id);
-            
-            if (student == null)
-            {
-                return NotFound();
-            }
-            
-            return View(student);
-        }
+       public async Task<IActionResult> Edit(int id)
+{
+    var student = await _studentService.GetStudentByIdAsync(id);
+    
+    if (student == null)
+    {
+        return NotFound();
+    }
+    
+    ViewBag.Parents = await _parentService.GetAllParentsAsync();
+    return View(student);
+}
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

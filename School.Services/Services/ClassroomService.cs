@@ -16,7 +16,7 @@ public class ClassroomService : IClassroomService
 
     public async Task<IEnumerable<Classroom>> GetAllClassroomsAsync()
     {
-        return await _classroomRepository.GetAllAsync();
+            return await _classroomRepository.GetClassroomsWithStudentsAsync(); 
     }
 
     public async Task<Classroom?> GetClassroomByIdAsync(int id)

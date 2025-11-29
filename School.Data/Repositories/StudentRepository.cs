@@ -14,7 +14,6 @@ public class StudentRepository : Repository<Student>, IStudentRepository
     {
         return await _context.Students
             .Where(s => s.Enrollments.Any(e => e.ClassroomId == classroomId))
-            .Include(s => s.Parent)
             .ToListAsync();
     }
 
@@ -23,7 +22,6 @@ public class StudentRepository : Repository<Student>, IStudentRepository
         return await _context.Students
             .Include(s => s.Enrollments)
                 .ThenInclude(e => e.Classroom)
-            .Include(s => s.Parent)
             .ToListAsync();
     }
 
@@ -34,8 +32,6 @@ public class StudentRepository : Repository<Student>, IStudentRepository
                 .ThenInclude(e => e.Classroom)
             .Include(s => s.Grades)
                 .ThenInclude(g => g.Subject)
-            .Include(s => s.Attendances)
-            .Include(s => s.Parent)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
 }

@@ -124,8 +124,7 @@
                                     <tr>
                                         <td>@course.Subject?.Name</td>
                                         <td>@course.Teacher?.FirstName @course.Teacher?.LastName</td>
-                                        <td>@(course.Schedule ?? "N/A")</td>
-                                        <td>@course.Semester</td>
+                                        <td colspan="2">@(course.Schedule ?? "N/A")</td>
                                     </tr>
                                 }
                             </tbody>

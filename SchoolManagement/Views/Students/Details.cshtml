@@ -125,13 +125,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var grade in Model.Grades.OrderByDescending(g => g.ExamDate).Take(5))
+                                @foreach (var grade in Model.Grades.OrderByDescending(g => g.DateRecorded).Take(5))
                                 {
                                     <tr>
                                         <td>@grade.Subject?.Name</td>
                                         <td><strong>@grade.Score</strong></td>
-                                        <td>@grade.ExamType</td>
-                                        <td>@grade.ExamDate.ToString("MMM dd, yyyy")</td>
+                                        <td>@grade.Comments</td>
+                                        <td>@grade.DateRecorded.ToString("MMM dd, yyyy")</td>
                                     </tr>
                                 }
                             </tbody>

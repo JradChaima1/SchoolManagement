@@ -39,50 +39,29 @@
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label">Specialization</label>
+                            <label class="form-label">Specialization (Select Subjects)</label>
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Mathematics" id="math" name="specializations">
-                                        <label class="form-check-label" for="math">Mathematics</label>
+                                @if (ViewBag.Subjects != null && ((IEnumerable<School.Core.Models.Subject>)ViewBag.Subjects).Any())
+                                {
+                                    @foreach (var subject in (IEnumerable<School.Core.Models.Subject>)ViewBag.Subjects)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input spec-check" type="checkbox" 
+                                                       value="@subject.Name" id="subject_@subject.Id">
+                                                <label class="form-check-label" for="subject_@subject.Id">
+                                                    @subject.Name
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="col-12">
+                                        <p class="text-muted">No subjects available. Please create subjects first.</p>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Physics" id="physics" name="specializations">
-                                        <label class="form-check-label" for="physics">Physics</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Chemistry" id="chemistry" name="specializations">
-                                        <label class="form-check-label" for="chemistry">Chemistry</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Biology" id="biology" name="specializations">
-                                        <label class="form-check-label" for="biology">Biology</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="English" id="english" name="specializations">
-                                        <label class="form-check-label" for="english">English</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="History" id="history" name="specializations">
-                                        <label class="form-check-label" for="history">History</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Geography" id="geography" name="specializations">
-                                        <label class="form-check-label" for="geography">Geography</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Computer Science" id="cs" name="specializations">
-                                        <label class="form-check-label" for="cs">Computer Science</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Physical Education" id="pe" name="specializations">
-                                        <label class="form-check-label" for="pe">Physical Education</label>
-                                    </div>
-                                </div>
+                                }
                             </div>
                             <input type="hidden" asp-for="Specialization" id="specializationField" />
                         </div>
@@ -106,7 +85,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         document.querySelector('form').addEventListener('submit', function() {
-            const checkboxes = document.querySelectorAll('input[name="specializations"]:checked');
+            const checkboxes = document.querySelectorAll('.spec-check:checked');
             const values = Array.from(checkboxes).map(cb => cb.value);
             document.getElementById('specializationField').value = values.join(', ');
         });

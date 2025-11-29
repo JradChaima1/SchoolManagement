@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using School.Data;
 
@@ -11,9 +12,11 @@ using School.Data;
 namespace SchoolManagement.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20251129165159_AllowNullTeacherAndClassroomInCourse")]
+    partial class AllowNullTeacherAndClassroomInCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,39 @@ namespace SchoolManagement.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("School.Core.Models.Attendance", b =>
+                {
+                    b.Property<int>("AttendanceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceId"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendanceId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Attendances");
+                });
 
             modelBuilder.Entity("School.Core.Models.Classroom", b =>
                 {
@@ -341,6 +377,25 @@ namespace SchoolManagement.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("School.Core.Models.Attendance", b =>
+                {
+                    b.HasOne("School.Core.Models.Course", "Course")
+                        .WithMany("Attendances")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("School.Core.Models.Student", "Student")
+                        .WithMany("Attendances")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("School.Core.Models.Course", b =>
                 {
                     b.HasOne("School.Core.Models.Classroom", "Classroom")
@@ -431,6 +486,11 @@ namespace SchoolManagement.Migrations
                     b.Navigation("Enrollments");
                 });
 
+            modelBuilder.Entity("School.Core.Models.Course", b =>
+                {
+                    b.Navigation("Attendances");
+                });
+
             modelBuilder.Entity("School.Core.Models.Parent", b =>
                 {
                     b.Navigation("Students");
@@ -443,6 +503,8 @@ namespace SchoolManagement.Migrations
 
             modelBuilder.Entity("School.Core.Models.Student", b =>
                 {
+                    b.Navigation("Attendances");
+
                     b.Navigation("Enrollments");
 
                     b.Navigation("Grades");

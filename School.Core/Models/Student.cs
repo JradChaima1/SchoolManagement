@@ -16,7 +16,6 @@ namespace School.Core.Models
       
         public Parent? Parent { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
-        public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
         public ICollection<Grade> Grades { get; set; } = new List<Grade>();
     }
 }

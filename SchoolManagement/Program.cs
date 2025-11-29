@@ -28,6 +28,9 @@ builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IGradeService, GradeService>();
+builder.Services.AddScoped<IParentService, ParentService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
@@ -39,6 +42,13 @@ builder.Services.AddSession(options =>
 });
 var app = builder.Build();
 
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<SchoolContext>();
+    DataSeeder.SeedData(context);
+}
 
 if (!app.Environment.IsDevelopment())
 {

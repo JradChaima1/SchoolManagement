@@ -16,7 +16,6 @@ public class SchoolContext : DbContext
     public DbSet<Course> Courses => Set<Course>();
     public DbSet<Subject> Subjects => Set<Subject>();
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
-    public DbSet<Attendance> Attendances => Set<Attendance>();
     public DbSet<Grade> Grades => Set<Grade>();
     public DbSet<Parent> Parents => Set<Parent>();
     public DbSet<User> Users => Set<User>();
@@ -27,6 +26,7 @@ public class SchoolContext : DbContext
         base.OnModelCreating(modelBuilder);
 
           
+
     modelBuilder.Entity<Student>()
         .HasOne(s => s.Parent)
         .WithMany(p => p.Students)
@@ -57,26 +57,13 @@ public class SchoolContext : DbContext
         .HasOne(c => c.Classroom)
         .WithMany(cl => cl.Courses)
         .HasForeignKey(c => c.ClassroomId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.SetNull);
 
     modelBuilder.Entity<Course>()
         .HasOne(c => c.Teacher)
         .WithMany(t => t.Courses)
         .HasForeignKey(c => c.TeacherId)
-        .OnDelete(DeleteBehavior.Restrict);
-
-    
-    modelBuilder.Entity<Attendance>()
-        .HasOne(a => a.Student)
-        .WithMany(s => s.Attendances)
-        .HasForeignKey(a => a.StudentId)
-        .OnDelete(DeleteBehavior.Cascade);
-
-    modelBuilder.Entity<Attendance>()
-        .HasOne(a => a.Course)
-        .WithMany(c => c.Attendances)
-        .HasForeignKey(a => a.CourseId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.SetNull);
 
     
     modelBuilder.Entity<Grade>()

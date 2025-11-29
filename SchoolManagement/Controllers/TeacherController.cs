@@ -9,10 +9,12 @@ namespace SchoolManagement.Controllers
     public class TeachersController : Controller
     {
         private readonly ITeacherService _teacherService;
+        private readonly ISubjectService _subjectService;
 
-        public TeachersController(ITeacherService teacherService)
+        public TeachersController(ITeacherService teacherService, ISubjectService subjectService)
         {
             _teacherService = teacherService;
+            _subjectService = subjectService;
         }
 
         public async Task<IActionResult> Index()
@@ -36,8 +38,10 @@ namespace SchoolManagement.Controllers
             return View(teacher);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var subjects = await _subjectService.GetAllSubjectsAsync();
+            ViewBag.Subjects = subjects;
             return View();
         }
 
@@ -62,6 +66,9 @@ namespace SchoolManagement.Controllers
             {
                 return NotFound();
             }
+            
+            var subjects = await _subjectService.GetAllSubjectsAsync();
+            ViewBag.Subjects = subjects;
             
             return View(teacher);
         }

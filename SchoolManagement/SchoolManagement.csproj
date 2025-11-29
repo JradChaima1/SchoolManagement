@@ -13,6 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 	 <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+	 <PackageReference Include="DevExtreme.AspNet.Core" Version="20.1.3" />
   </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\School.Core\School.Core.csproj" />
