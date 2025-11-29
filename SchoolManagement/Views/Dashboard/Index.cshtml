@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+    <p class="mb-0">School Management Overview</p>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card card-custom text-center">
+            <div class="card-body">
+                <i class="bi bi-people-fill" style="font-size: 3rem; color: var(--primary);"></i>
+                <h3 class="mt-3">@ViewBag.TotalStudents</h3>
+                <p class="text-muted">Total Students</p>
+                <a asp-controller="Students" asp-action="Index" class="btn btn-sm btn-primary-custom">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-custom text-center">
+            <div class="card-body">
+                <i class="bi bi-person-badge-fill" style="font-size: 3rem; color: var(--accent);"></i>
+                <h3 class="mt-3">@ViewBag.TotalTeachers</h3>
+                <p class="text-muted">Total Teachers</p>
+                <a asp-controller="Teachers" asp-action="Index" class="btn btn-sm btn-success-custom">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-custom text-center">
+            <div class="card-body">
+                <i class="bi bi-door-open-fill" style="font-size: 3rem; color: var(--primary-light);"></i>
+                <h3 class="mt-3">@ViewBag.TotalClassrooms</h3>
+                <p class="text-muted">Total Classrooms</p>
+                <a asp-controller="Classrooms" asp-action="Index" class="btn btn-sm btn-primary-custom">View All</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom">
+    <div class="card-header card-header-custom">
+        <i class="bi bi-trophy-fill"></i> Top 5 Performing Students
+    </div>
+    <div class="card-body">
+        @if (ViewBag.TopStudents != null && ((IEnumerable<School.Core.Models.Student>)ViewBag.TopStudents).Any())
+        {
+            <div class="list-group">
+                @{
+                    int rank = 1;
+                }
+                @foreach (var student in (IEnumerable<School.Core.Models.Student>)ViewBag.TopStudents)
+                {
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge badge-custom me-2">#@rank</span>
+                            <strong>@student.FirstName @student.LastName</strong>
+                        </div>
+                        <a asp-controller="Students" asp-action="Details" asp-route-id="@student.Id" 
+                           class="btn btn-sm btn-primary-custom">View</a>
+                    </div>
+                    rank++;
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted text-center">No student data available</p>
+        }
+    </div>
+</div>

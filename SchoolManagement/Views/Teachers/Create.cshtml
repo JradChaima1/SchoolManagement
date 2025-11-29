@@ -1,0 +1,114 @@
+@model School.Core.Models.Teacher
+
+@{
+    ViewData["Title"] = "Add New Teacher";
+}
+
+<div class="page-header">
+    <h2><i class="bi bi-person-plus-fill"></i> Add New Teacher</h2>
+    <p class="mb-0">Enter teacher information</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <i class="bi bi-pencil-square"></i> Teacher Information
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" required />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" required />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" type="email" class="form-control" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Specialization</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Mathematics" id="math" name="specializations">
+                                        <label class="form-check-label" for="math">Mathematics</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Physics" id="physics" name="specializations">
+                                        <label class="form-check-label" for="physics">Physics</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Chemistry" id="chemistry" name="specializations">
+                                        <label class="form-check-label" for="chemistry">Chemistry</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Biology" id="biology" name="specializations">
+                                        <label class="form-check-label" for="biology">Biology</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="English" id="english" name="specializations">
+                                        <label class="form-check-label" for="english">English</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="History" id="history" name="specializations">
+                                        <label class="form-check-label" for="history">History</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Geography" id="geography" name="specializations">
+                                        <label class="form-check-label" for="geography">Geography</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Computer Science" id="cs" name="specializations">
+                                        <label class="form-check-label" for="cs">Computer Science</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Physical Education" id="pe" name="specializations">
+                                        <label class="form-check-label" for="pe">Physical Education</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="Specialization" id="specializationField" />
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary-custom">
+                            <i class="bi bi-check-circle"></i> Save Teacher
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.querySelector('form').addEventListener('submit', function() {
+            const checkboxes = document.querySelectorAll('input[name="specializations"]:checked');
+            const values = Array.from(checkboxes).map(cb => cb.value);
+            document.getElementById('specializationField').value = values.join(', ');
+        });
+    </script>
+}

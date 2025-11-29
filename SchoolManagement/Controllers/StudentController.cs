@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using School.Core.Interfaces;
 using School.Core.Models;
+using SchoolManagement.Filters;
 
 namespace SchoolManagement.Controllers
 {
+    [AuthorizeSession]
     public class StudentsController : Controller
     {
         private readonly IStudentService _studentService;
@@ -13,7 +15,6 @@ namespace SchoolManagement.Controllers
             _studentService = studentService;
         }
 
-        
         public async Task<IActionResult> Index(string searchTerm)
         {
             IEnumerable<Student> students;
@@ -31,7 +32,6 @@ namespace SchoolManagement.Controllers
             return View(students);
         }
 
-        
         public async Task<IActionResult> Details(int id)
         {
             var student = await _studentService.GetStudentByIdAsync(id);
@@ -41,20 +41,17 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            
             var averageGrade = await _studentService.GetStudentAverageGradeAsync(id);
             ViewBag.AverageGrade = averageGrade;
 
             return View(student);
         }
 
-        
         public IActionResult Create()
         {
             return View();
         }
 
-    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student)
@@ -80,7 +77,6 @@ namespace SchoolManagement.Controllers
             return View(student);
         }
 
-       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Student student)
@@ -99,7 +95,6 @@ namespace SchoolManagement.Controllers
             return View(student);
         }
 
-       
         public async Task<IActionResult> Delete(int id)
         {
             var student = await _studentService.GetStudentByIdAsync(id);
@@ -112,7 +107,6 @@ namespace SchoolManagement.Controllers
             return View(student);
         }
 
-        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -121,7 +115,6 @@ namespace SchoolManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-      
         public async Task<IActionResult> TopPerformers()
         {
             var topStudents = await _studentService.GetTopPerformingStudentsAsync(10);

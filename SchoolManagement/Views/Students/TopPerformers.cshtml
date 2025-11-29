@@ -1,0 +1,59 @@
+@model IEnumerable<School.Core.Models.Student>
+
+@{
+    ViewData["Title"] = "Top Performing Students";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2><i class="bi bi-trophy-fill"></i> Top Performing Students</h2>
+            <p class="mb-0">Students with highest average grades</p>
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    @{
+        int rank = 1;
+    }
+    @foreach (var student in Model)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card card-custom">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <div class="badge badge-custom" style="font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                #@rank
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">@student.FirstName @student.LastName</h5>
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-envelope"></i> @(student.Email ?? "N/A")
+                            </p>
+                        </div>
+                        <div>
+                            <a asp-action="Details" asp-route-id="@student.Id" class="btn btn-sm btn-primary-custom">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        rank++;
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+        <p class="text-muted mt-3">No student data available</p>
+    </div>
+}

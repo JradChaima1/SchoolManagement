@@ -15,7 +15,14 @@ namespace SchoolManagement.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var userId = HttpContext.Session.GetInt32("UserId");
+            
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
+            return RedirectToAction("Index", "Dashboard");
         }
 
         public IActionResult Privacy()
