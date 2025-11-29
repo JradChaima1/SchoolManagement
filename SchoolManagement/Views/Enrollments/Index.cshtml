@@ -1,0 +1,83 @@
+@model IEnumerable<School.Core.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Enrollments";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2><i class="bi bi-journal-check"></i> Enrollments Management</h2>
+            <p class="mb-0">Manage student enrollments in classrooms</p>
+        </div>
+        <a asp-action="Create" class="btn btn-light btn-lg">
+            <i class="bi bi-plus-circle"></i> New Enrollment
+        </a>
+    </div>
+</div>
+
+<div class="card card-custom">
+    <div class="card-header card-header-custom">
+        <i class="bi bi-table"></i> Enrollment List
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-custom table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Student</th>
+                            <th>Classroom</th>
+                            <th>Academic Year</th>
+                            <th>Semester</th>
+                            <th>Enrollment Date</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var enrollment in Model)
+                        {
+                            <tr>
+                                <td>@enrollment.Id</td>
+                               <td>@(ViewBag.Students.ContainsKey(enrollment.StudentId) ? ViewBag.Students[enrollment.StudentId] : "N/A")</td>
+                                <td>@(ViewBag.Classrooms.ContainsKey(enrollment.ClassroomId) ? ViewBag.Classrooms[enrollment.ClassroomId] : "N/A")</td>
+
+                                <td>@enrollment.AcademicYear</td>
+                                <td>@enrollment.Semester</td>
+                                <td>@enrollment.EnrollmentDate.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <span class="badge @(enrollment.Status == "Active" ? "bg-success" : "bg-secondary")">
+                                        @enrollment.Status
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Edit" asp-route-id="@enrollment.Id" 
+                                       class="btn btn-sm btn-warning" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@enrollment.Id" 
+                                       class="btn btn-sm btn-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                <p class="text-muted mt-3">No enrollments found</p>
+                <a asp-action="Create" class="btn btn-primary-custom">
+                    <i class="bi bi-plus-circle"></i> Create First Enrollment
+                </a>
+            </div>
+        }
+    </div>
+</div>

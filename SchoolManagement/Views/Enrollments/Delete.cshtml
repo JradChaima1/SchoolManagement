@@ -1,0 +1,57 @@
+@model School.Core.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Delete Enrollment";
+}
+
+<div class="page-header bg-danger">
+    <h2><i class="bi bi-exclamation-triangle-fill"></i> Delete Enrollment</h2>
+    <p class="mb-0">Are you sure you want to remove this enrollment?</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card card-custom border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-journal-x"></i> Enrollment to Delete
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Student:</dt>
+                    <dd class="col-sm-8">@Model.Student?.FirstName @Model.Student?.LastName</dd>
+                    
+                    <dt class="col-sm-4">Classroom:</dt>
+                    <dd class="col-sm-8">@Model.Classroom?.Name</dd>
+                    
+                    <dt class="col-sm-4">Academic Year:</dt>
+                    <dd class="col-sm-8">@Model.AcademicYear</dd>
+                    
+                    <dt class="col-sm-4">Semester:</dt>
+                    <dd class="col-sm-8">@Model.Semester</dd>
+                    
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.Status == "Active" ? "bg-success" : "bg-secondary")">
+                            @Model.Status
+                        </span>
+                    </dd>
+                </dl>
+
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <strong>Warning:</strong> This action cannot be undone.
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Yes, Delete Enrollment
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

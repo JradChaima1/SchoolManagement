@@ -1,0 +1,85 @@
+@model School.Core.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Edit Enrollment";
+}
+
+<div class="page-header">
+    <h2><i class="bi bi-pencil-fill"></i> Edit Enrollment</h2>
+    <p class="mb-0">Update enrollment information</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card card-custom">
+            <div class="card-header card-header-custom">
+                <i class="bi bi-pencil-square"></i> Enrollment Information
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="EnrollmentDate" />
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Student</label>
+                            <select asp-for="StudentId" class="form-select" required>
+                                @foreach (var student in (IEnumerable<dynamic>)ViewBag.Students)
+                                {
+                                    <option value="@student.Value">@student.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="StudentId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Classroom</label>
+                            <select asp-for="ClassroomId" class="form-select" required>
+                                @foreach (var classroom in (IEnumerable<dynamic>)ViewBag.Classrooms)
+                                {
+                                    <option value="@classroom.Value">@classroom.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="ClassroomId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="AcademicYear" class="form-label">Academic Year</label>
+                            <input asp-for="AcademicYear" class="form-control" required />
+                            <span asp-validation-for="AcademicYear" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Semester" class="form-label">Semester</label>
+                            <select asp-for="Semester" class="form-select" required>
+                                <option value="Fall">Fall</option>
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                            </select>
+                            <span asp-validation-for="Semester" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label asp-for="Status" class="form-label">Status</label>
+                            <select asp-for="Status" class="form-select" required>
+                                <option value="Active">Active</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Withdrawn">Withdrawn</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary-custom">
+                            <i class="bi bi-check-circle"></i> Update Enrollment
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
