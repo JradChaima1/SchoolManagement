@@ -82,23 +82,26 @@ namespace School.Services.Services
 
 
 
-        public async Task<IEnumerable<MonthlyEnrollment>> GetMonthlyEnrollmentsAsync()
+      public async Task<IEnumerable<MonthlyEnrollment>> GetMonthlyEnrollmentsAsync()
+{
+    var currentYear = DateTime.Now.Year;
+    var startYear = currentYear - 4; // Show last 5 years including current year
+    
+    var enrollments = await _context.Enrollments
+        .Where(e => e.EnrollmentDate.Year >= startYear)
+        .GroupBy(e => e.EnrollmentDate.Year)
+        .Select(g => new MonthlyEnrollment
         {
-            var enrollments = await _context.Enrollments
-                .Where(e => e.EnrollmentDate >= DateTime.Now.AddMonths(-12))
-                .GroupBy(e => new { e.EnrollmentDate.Year, e.EnrollmentDate.Month })
-                .Select(g => new MonthlyEnrollment
-                {
-                    Year = g.Key.Year,
-                    Month = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMM yyyy"),
-                    Count = g.Count()
-                })
-                .OrderBy(m => m.Year)
-                .ThenBy(m => m.Month)
-                .ToListAsync();
+            Year = g.Key,
+            Month = g.Key.ToString(), // Use year as the label
+            Count = g.Count()
+        })
+        .OrderBy(m => m.Year)
+        .ToListAsync();
 
-            return enrollments;
-        }
+    return enrollments;
+}
+
 
         public async Task<IEnumerable<TeacherWorkload>> GetTeacherWorkloadAsync()
         {

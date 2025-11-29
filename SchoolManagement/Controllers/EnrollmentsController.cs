@@ -24,28 +24,34 @@ namespace SchoolManagement.Controllers
             _classroomService = classroomService;
         }
 
-        public async Task<IActionResult> Index()
+public async Task<IActionResult> Index(string searchTerm)
 {
-    var enrollments = await _enrollmentService.GetAllEnrollmentsAsync();
+    ViewBag.SearchTerm = searchTerm;
     
+    var enrollments = await _enrollmentService.GetAllEnrollmentsAsync();
     
     var students = await _studentService.GetAllStudentsAsync();
     var classrooms = await _classroomService.GetAllClassroomsAsync();
     
-   
-    var enrollmentList = enrollments.Select(e => new
-    {
-        Enrollment = e,
-        StudentName = students.FirstOrDefault(s => s.Id == e.StudentId)?.FirstName + " " + 
-                     students.FirstOrDefault(s => s.Id == e.StudentId)?.LastName,
-        ClassroomName = classrooms.FirstOrDefault(c => c.Id == e.ClassroomId)?.Name
-    }).ToList();
-    
     ViewBag.Students = students.ToDictionary(s => s.Id, s => $"{s.FirstName} {s.LastName}");
     ViewBag.Classrooms = classrooms.ToDictionary(c => c.Id, c => c.Name);
     
+   
+    if (!string.IsNullOrEmpty(searchTerm))
+    {
+        enrollments = enrollments.Where(e =>
+            (ViewBag.Students.ContainsKey(e.StudentId) && 
+             ViewBag.Students[e.StudentId].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+            (ViewBag.Classrooms.ContainsKey(e.ClassroomId) && 
+             ViewBag.Classrooms[e.ClassroomId].Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+            e.AcademicYear.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            e.Semester.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+        ).ToList();
+    }
+    
     return View(enrollments);
 }
+
 
 
         public async Task<IActionResult> Create(int? studentId, int? classroomId)
